@@ -42,8 +42,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @Bind(R.id.ivProfileImage)
         ImageView ivProfileImage;
 
-        @Bind(R.id.tvUsername)
-        TextView tvUsername;
+        @Bind(R.id.tvName)
+        TextView tvName;
+
+        @Bind(R.id.tvScreenName)
+        TextView tvScreenName;
 
         @Bind(R.id.tvText)
         TextView tvText;
@@ -60,9 +63,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setTweet(Tweet tweet) {
-            tvUsername.setText(tweet.getUser().getName());
+            tvName.setText(tweet.getUser().getName());
             tvText.setText(tweet.getText());
             tvTime.setText(tweet.getRelativeTime());
+            tvScreenName.setText("@" + tweet.getUser().getScreenName());
             Glide.with((TimelineActivity) context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .into(ivProfileImage);
@@ -102,6 +106,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         for (Tweet tweet : newTweets) {
             tweets.add(tweet);
             notifyItemInserted(tweets.size() - 1);
+        }
+    }
+
+    public Tweet getLastTweet() {
+        int size = tweets.size();
+        if (size > 0) {
+            return tweets.get(tweets.size() - 1);
+        } else {
+            return null;
         }
     }
 }

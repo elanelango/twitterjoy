@@ -31,7 +31,6 @@ public class Tweet {
 
     public String getRelativeTime() {
         long currTime = System.currentTimeMillis() / 1000L;
-        Log.e("ELANLOG", Long.toString(createdAt.getTime()));
         int diffTime = (int) (currTime - (createdAt.getTime() / 1000L));
         if (diffTime < 60)
             return diffTime + "s";

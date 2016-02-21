@@ -15,6 +15,7 @@ import com.elanelango.apps.twitterjoy.R;
 import com.elanelango.apps.twitterjoy.TwitterApplication;
 import com.elanelango.apps.twitterjoy.TwitterClient;
 import com.elanelango.apps.twitterjoy.models.Tweet;
+import com.elanelango.apps.twitterjoy.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeDialog.ComposeListener {
+public class TimelineActivity extends AppCompatActivity implements ComposeDialog.ComposeListener, TwitterClient.TweetsListener {
 
     private TwitterClient client;
 
@@ -62,21 +63,30 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
 
         client = TwitterApplication.getRestClient();
         populateTimeline();
+
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Tweet tweet = tweetsAdapter.getLastTweet();
+                long lastTweetId = (tweet != null)? tweet.getId() : 1;
+                client.getHomeTweets(lastTweetId, TimelineActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void onTweets(List<Tweet> tweets) {
+        Log.e("ELANLOG", tweets.toString());
+        tweetsAdapter.addAll(tweets);
+    }
+
+    @Override
+    public void onError(String errorText) {
+
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new TwitterClient.TweetsListener() {
-            @Override
-            public void onTweets(List<Tweet> tweets) {
-                tweetsAdapter.addAll(tweets);
-                Log.d("DEBUG", tweets.toString());
-            }
-
-            @Override
-            public void onError(String errorText) {
-
-            }
-        });
+        client.getHomeTweets(1, this);
     }
 
     @Override
