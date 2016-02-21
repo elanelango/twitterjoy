@@ -4,5 +4,9 @@
     <string name="app_name">Twitter Joy</string>
     <string name="login_label">Connect to  Twitter </string>
     <string name="title_activity_timeline">Home</string>
+    <string name="close_dialog">Close dialog</string>
+    <string name="compose_hint">What\'s happening?</string>
+    <string name="tweet_button">Tweet</string>
+    <string name="char_count">140</string>
 
 </resources>

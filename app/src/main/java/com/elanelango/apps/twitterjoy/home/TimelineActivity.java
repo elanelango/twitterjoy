@@ -2,13 +2,14 @@ package com.elanelango.apps.twitterjoy.home;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.elanelango.apps.twitterjoy.R;
 import com.elanelango.apps.twitterjoy.TwitterApplication;
@@ -21,7 +22,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeDialog.ComposeListener {
 
     private TwitterClient client;
 
@@ -46,8 +47,9 @@ public class TimelineActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager fm = getSupportFragmentManager();
+                ComposeDialog composeDialog = ComposeDialog.newInstance();
+                composeDialog.show(fm, "compose_tweet");
             }
         });
 
@@ -63,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new TwitterClient.TweetHandler() {
+        client.getHomeTimeline(new TwitterClient.TweetsListener() {
             @Override
             public void onTweets(List<Tweet> tweets) {
                 tweetsAdapter.addAll(tweets);
@@ -75,5 +77,16 @@ public class TimelineActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onFinishCompose(String tweet) {
+        Toast.makeText(this, tweet, Toast.LENGTH_SHORT).show();
+        client.postTweet(new TwitterClient.PostTweetListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+        }, tweet);
     }
 }

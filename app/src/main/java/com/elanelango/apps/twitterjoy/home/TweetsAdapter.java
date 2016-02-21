@@ -39,7 +39,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class TextHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.ivProfileImage)
-        ImageView ivPorfileImage;
+        ImageView ivProfileImage;
 
         @Bind(R.id.tvUsername)
         TextView tvUsername;
@@ -59,7 +59,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             tvText.setText(tweet.getText());
             Glide.with((TimelineActivity) context)
                     .load(tweet.getUser().getProfileImageUrl())
-                    .into(ivPorfileImage);
+                    .into(ivProfileImage);
         }
     }
 

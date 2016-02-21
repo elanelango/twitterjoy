@@ -17,8 +17,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +37,13 @@ import java.util.List;
  * 
  */
 public class TwitterClient extends OAuthBaseClient {
-    public interface TweetHandler {
+    public interface TweetsListener {
         public void onTweets(List<Tweet> tweets);
         public void onError(String errorText);
+    }
+
+    public interface PostTweetListener {
+        public void onSuccess();
     }
 
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
@@ -55,7 +61,7 @@ public class TwitterClient extends OAuthBaseClient {
         gson = gsonBuilder.create();
 	}
 
-	public void getHomeTimeline(final TweetHandler handler) {
+	public void getHomeTimeline(final TweetsListener handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
@@ -75,6 +81,24 @@ public class TwitterClient extends OAuthBaseClient {
             }
         });
 	}
+
+    public void postTweet(PostTweetListener listener, String tweet) {
+        String apiUrl = getApiUrl("statuses/update.json");
+        RequestParams params = new RequestParams();
+        params.put("status", tweet);
+        getClient().post(apiUrl, params, new TextHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+        });
+    }
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)
