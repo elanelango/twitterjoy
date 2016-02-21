@@ -56,7 +56,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvTweets.setLayoutManager(layoutManager);
 
-        tweets = new ArrayList<Tweet>();
+        tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(tweets);
         rvTweets.setAdapter(tweetsAdapter);
 
