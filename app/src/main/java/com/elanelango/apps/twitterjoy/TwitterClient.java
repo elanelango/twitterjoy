@@ -62,11 +62,15 @@ public class TwitterClient extends OAuthBaseClient {
         gson = gsonBuilder.create();
 	}
 
-    public void getHomeTweets(long since_id, final TweetsListener handler) {
+    public void getHomeTweets(long since_id, long max_id, final TweetsListener handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 25);
-        params.put("since_id", since_id);
+        if (since_id > 0)
+            params.put("since_id", since_id);
+        if (max_id > 0)
+            params.put("max_id", max_id);
+
         getClient().get(apiUrl, params, new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {

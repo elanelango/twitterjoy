@@ -111,9 +111,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public Tweet getLastTweet() {
+        return get(tweets.size() - 1);
+    }
+
+    public Tweet getFirstTweet() {
+        return get(0);
+    }
+
+    public Tweet get(int position) {
         int size = tweets.size();
         if (size > 0) {
-            return tweets.get(tweets.size() - 1);
+            return tweets.get(position);
         } else {
             return null;
         }
@@ -122,5 +130,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void add(int position, Tweet tweet) {
         tweets.add(position, tweet);
         notifyItemInserted(position);
+    }
+
+    public void addAllToFront(List<Tweet> newTweets) {
+        int position = newTweets.size() - 1;
+        for (int i = position; i >= 0; i--) {
+            add(0, newTweets.get(position));
+        }
     }
 }
