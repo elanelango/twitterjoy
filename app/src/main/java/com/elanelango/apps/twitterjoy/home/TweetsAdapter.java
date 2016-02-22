@@ -103,9 +103,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void addAll(List<Tweet> newTweets) {
+        int position = tweets.size();
         for (Tweet tweet : newTweets) {
-            tweets.add(tweet);
-            notifyItemInserted(tweets.size() - 1);
+            add(position, tweet);
+            position++;
         }
     }
 
@@ -116,5 +117,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else {
             return null;
         }
+    }
+
+    public void add(int position, Tweet tweet) {
+        tweets.add(position, tweet);
+        notifyItemInserted(position);
     }
 }

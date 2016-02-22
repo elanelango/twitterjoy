@@ -92,11 +92,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     @Override
     public void onFinishCompose(String tweet) {
         Toast.makeText(this, tweet, Toast.LENGTH_SHORT).show();
-        client.postTweet(new TwitterClient.PostTweetListener() {
+        client.postTweet(tweet, new TwitterClient.PostTweetListener() {
             @Override
-            public void onSuccess() {
-
+            public void onSuccess(Tweet postedTweet) {
+                tweetsAdapter.add(0, postedTweet);
+                rvTweets.scrollToPosition(0);
             }
-        }, tweet);
+        });
     }
 }

@@ -43,7 +43,7 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
     public interface PostTweetListener {
-        public void onSuccess();
+        public void onSuccess(Tweet postedTweet);
     }
 
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
@@ -83,14 +83,15 @@ public class TwitterClient extends OAuthBaseClient {
         });
     }
 
-    public void postTweet(PostTweetListener listener, String tweet) {
+    public void postTweet(String tweet, final PostTweetListener listener) {
         String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", tweet);
         getClient().post(apiUrl, params, new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
+                Tweet postedTweet = gson.fromJson(responseString, Tweet.class);
+                listener.onSuccess(postedTweet);
             }
 
             @Override
