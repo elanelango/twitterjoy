@@ -2,7 +2,7 @@
 
 **TwitterJoy** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **8** hours spent in total
+Time spent: **10** hours spent in total
 
 ## User Stories
 
@@ -49,9 +49,9 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![GIF demo](https://github.com/elanelango/twitterjoy/raw/master/demo.gif)
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+Video created with [AndroidTool](https://github.com/mortenjust/androidtool-mac).
 
 ## Notes
 
@@ -60,11 +60,13 @@ Describe any challenges encountered while building the app.
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
-- [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Android
+- [Gson](https://github.com/google/gson) - A Java serialization library that can convert Java Objects into JSON and back.
+- [ButterKnife](http://jakewharton.github.io/butterknife/) - Field and method binding for Android views
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2016] [Elanchezhiyan Elango]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
