@@ -1,13 +1,17 @@
 package com.elanelango.apps.twitterjoy.home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,6 +61,29 @@ public class ComposeDialog extends DialogFragment implements Button.OnClickListe
 
         btTweet.setOnClickListener(this);
         ivClose.setOnClickListener(this);
+        etCompose.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int len = s.length();
+                int rem = 140 - len;
+                tvCount.setText(Integer.toString(rem));
+                if (rem < 0) {
+                    tvCount.setTextColor(Color.RED);
+                } else {
+                    tvCount.setTextColor(Color.BLACK);
+                }
+            }
+        });
         return view;
     }
 
@@ -64,6 +91,14 @@ public class ComposeDialog extends DialogFragment implements Button.OnClickListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         etCompose.requestFocus();
+    }
+
+    @Override
+    public void onResume() {
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        super.onResume();
     }
 
     @Override
