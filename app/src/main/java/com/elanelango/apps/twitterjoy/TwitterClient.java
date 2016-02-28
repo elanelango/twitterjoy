@@ -62,8 +62,7 @@ public class TwitterClient extends OAuthBaseClient {
         gson = gsonBuilder.create();
 	}
 
-    public void getHomeTweets(long since_id, long max_id, final TweetsListener handler) {
-        String apiUrl = getApiUrl("statuses/home_timeline.json");
+    private void getTimeline(String apiUrl, long since_id, long max_id, final TweetsListener handler) {
         RequestParams params = new RequestParams();
         params.put("count", 25);
         if (since_id > 0)
@@ -87,6 +86,16 @@ public class TwitterClient extends OAuthBaseClient {
         });
     }
 
+    public void getHomeTweets(long since_id, long max_id, final TweetsListener handler) {
+        String apiUrl = getApiUrl("statuses/home_timeline.json");
+        getTimeline(apiUrl, since_id, max_id, handler);
+    }
+
+    public void getMentions(long since_id, long max_id, final TweetsListener handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        getTimeline(apiUrl, since_id, max_id, handler);
+    }
+
     public void postTweet(String tweet, final PostTweetListener listener) {
         String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
@@ -105,12 +114,4 @@ public class TwitterClient extends OAuthBaseClient {
 
         });
     }
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
 }
