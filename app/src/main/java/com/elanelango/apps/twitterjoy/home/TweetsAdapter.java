@@ -1,6 +1,7 @@
 package com.elanelango.apps.twitterjoy.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.elanelango.apps.twitterjoy.R;
 import com.elanelango.apps.twitterjoy.models.Tweet;
+import com.elanelango.apps.twitterjoy.models.User;
 
+import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -62,14 +65,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ButterKnife.bind(this, itemView);
         }
 
-        public void setTweet(Tweet tweet) {
+        public void setTweet(final Tweet tweet) {
             tvName.setText(tweet.getUser().getName());
             tvText.setText(tweet.getText());
             tvTime.setText(tweet.getRelativeTime());
             tvScreenName.setText("@" + tweet.getUser().getScreenName());
-            Glide.with((TimelineActivity) context)
+            Glide.with(context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .into(ivProfileImage);
+
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    i.putExtra("user", Parcels.wrap(User.class, tweet.getUser()));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 

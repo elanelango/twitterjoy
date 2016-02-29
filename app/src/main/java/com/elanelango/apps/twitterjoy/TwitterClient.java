@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.elanelango.apps.twitterjoy.models.Tweet;
+import com.elanelango.apps.twitterjoy.models.User;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,6 +47,10 @@ public class TwitterClient extends OAuthBaseClient {
         public void onSuccess(Tweet postedTweet);
     }
 
+    public interface UserInfoListener {
+        public void onUserInfo(User user);
+    }
+
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1";
 	public static final String REST_CONSUMER_KEY = "IU3BFX8QtakfbaNdHle8RWrvV";
@@ -62,13 +67,17 @@ public class TwitterClient extends OAuthBaseClient {
         gson = gsonBuilder.create();
 	}
 
-    private void getTimeline(String apiUrl, long since_id, long max_id, final TweetsListener handler) {
+    private void getTimeline(String apiUrl, long since_id, long max_id, String screenName, final TweetsListener handler) {
         RequestParams params = new RequestParams();
         params.put("count", 25);
         if (since_id > 0)
             params.put("since_id", since_id);
+
         if (max_id > 0)
             params.put("max_id", max_id);
+
+        if (screenName != null)
+            params.put("screen_name", screenName);
 
         getClient().get(apiUrl, params, new TextHttpResponseHandler() {
             @Override
@@ -88,12 +97,12 @@ public class TwitterClient extends OAuthBaseClient {
 
     public void getHomeTweets(long since_id, long max_id, final TweetsListener handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
-        getTimeline(apiUrl, since_id, max_id, handler);
+        getTimeline(apiUrl, since_id, max_id, null, handler);
     }
 
     public void getMentions(long since_id, long max_id, final TweetsListener handler) {
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
-        getTimeline(apiUrl, since_id, max_id, handler);
+        getTimeline(apiUrl, since_id, max_id, null, handler);
     }
 
     public void postTweet(String tweet, final PostTweetListener listener) {
@@ -112,6 +121,27 @@ public class TwitterClient extends OAuthBaseClient {
 
             }
 
+        });
+    }
+
+    public void getUserTimeline(String screenName, long since_id, long max_id, TweetsListener handler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        getTimeline(apiUrl, since_id, max_id, screenName, handler);
+    }
+
+    public void getUserInfo(final UserInfoListener handler) {
+        String apiUrl = getApiUrl("account/verify_credentials.json");
+        getClient().get(apiUrl, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                User user = gson.fromJson(responseString, User.class);
+                handler.onUserInfo(user);
+            }
         });
     }
 }

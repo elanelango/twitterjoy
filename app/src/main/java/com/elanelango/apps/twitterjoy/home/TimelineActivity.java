@@ -25,6 +25,7 @@ import com.elanelango.apps.twitterjoy.TwitterClient;
 import com.elanelango.apps.twitterjoy.fragments.HomeTweetsFragment;
 import com.elanelango.apps.twitterjoy.fragments.MentionsFragment;
 import com.elanelango.apps.twitterjoy.models.Tweet;
+import com.elanelango.apps.twitterjoy.models.User;
 import com.elanelango.apps.twitterjoy.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         viewPager.setAdapter(viewPagerAdapter);
         tabStrip.setViewPager(viewPager);
 
-        client = new TwitterClient(this);
+        client = TwitterApplication.getRestClient();
     }
 
     @Override
