@@ -17,7 +17,7 @@ public class MentionsFragment extends TweetsListFragment {
     protected void getOlderTweets(TwitterClient.TweetsListener listener) {
         Tweet tweet = tweetsAdapter.getLastTweet();
         long lastTweetId = (tweet != null) ? tweet.getId() : 1;
-        client.getMentions(0, lastTweetId + 1, listener);
+        client.getMentions(0, lastTweetId - 1, listener);
     }
 
     @Override
